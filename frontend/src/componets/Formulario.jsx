@@ -1,32 +1,29 @@
 import { useContext, useState } from "react"
 import { useNavigate } from 'react-router-dom'
-import AuthContext from "../context/AuthProvider"
 import axios from 'axios';
 import Mensaje from "./Alertas/Mensaje";
 
+export const Formulario = ({paciente}) => {
 
-export const Formulario = ({ paciente }) => {
-    const { auth } = useContext(AuthContext)
     const navigate = useNavigate()
     const [mensaje, setMensaje] = useState({})
     const [form, setform] = useState({
-        nombre: paciente?.nombre ?? "",
-        propietario: paciente?.propietario ?? "",
-        email: paciente?.email ?? "",
-        celular: paciente?.celular ?? "",
-        salida: new Date(paciente?.salida).toLocaleDateString('en-CA', {timeZone: 'UTC'}) ?? "",
-        convencional: paciente?.convencional ?? "",
-        sintomas: paciente?.sintomas ?? ""
+        nombre: paciente?.nombre ??"",
+        propietario: paciente?.propietario ??"",
+        email: paciente?.email ??"",
+        celular: paciente?.celular ??"",
+        salida:  new Date(paciente?.salida).toLocaleDateString('en-CA', {timeZone: 'UTC'}) ?? "",
+        convencional: paciente?.convencional ??"",
+        sintomas: paciente?.sintomas ??""
     })
 
     const handleChange = (e) => {
-        setform({
-            ...form,
-            [e.target.name]: e.target.value
+        setform({...form,
+            [e.target.name]:e.target.value
         })
     }
 
-    const handleSubmit = async (e) => {
+    const handleSubmit = async(e) => { 
         e.preventDefault()
 
         if (paciente?._id) {
@@ -43,31 +40,33 @@ export const Formulario = ({ paciente }) => {
             navigate('/dashboard/listar')
         }
         else {
-            try {
-                const token = localStorage.getItem('token')
-                form.id = auth._id
-                const url = `${import.meta.env.VITE_BACKEND_URL}/paciente/registro`
-                const options = {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: `Bearer ${token}`
-                    }
+        try {
+            const token = localStorage.getItem('token')
+            const url = `${import.meta.env.VITE_BACKEND_URL}/paciente/registro`
+            const options={
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`
                 }
-                await axios.post(url, form, options)
-                navigate('/dashboard/listar')
-            } catch (error) {
-                setMensaje({ respuesta: error.response.data.msg, tipo: false })
-                setTimeout(() => {
-                    setMensaje({})
-                }, 3000);
             }
+            await axios.post(url,form,options)
+						setMensaje({ respuesta:"paciente registrado con exito y correo enviado", tipo: true })
+            setTimeout(() => {
+                navigate('/dashboard/listar');
+            }, 3000);
+        } catch (error) {
+						setMensaje({ respuesta: error.response.data.msg, tipo: false })
+            setTimeout(() => {
+                setMensaje({})
+            }, 3000);
         }
+    }
     }
 
     return (
-
+        
         <form onSubmit={handleSubmit}>
-            {Object.keys(mensaje).length > 0 && <Mensaje tipo={mensaje.tipo}>{mensaje.respuesta}</Mensaje>}
+            {Object.keys(mensaje).length>0 && <Mensaje tipo={mensaje.tipo}>{mensaje.respuesta}</Mensaje>}
             <div>
                 <label
                     htmlFor='nombre:'
@@ -92,7 +91,7 @@ export const Formulario = ({ paciente }) => {
                     className='border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md mb-5'
                     placeholder='nombre del propietario'
                     name='propietario'
-                    value={form.propietario}
+                    vavalue={form.propietario}
                     onChange={handleChange}
                 />
             </div>
