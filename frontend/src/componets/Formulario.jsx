@@ -9,10 +9,10 @@ export const Formulario = ({paciente}) => {
     const [mensaje, setMensaje] = useState({})
     const [form, setform] = useState({
         nombre: paciente?.nombre ??"",
-        propietario: paciente?.propietario ??"",
+        propietario: paciente?.propietario ||"",
         email: paciente?.email ??"",
         celular: paciente?.celular ??"",
-        salida:  new Date(paciente?.salida).toLocaleDateString('en-CA', {timeZone: 'UTC'}) ?? "",
+        salida:  new Date(paciente?.salida).toLocaleDateString('en-CA', {timeZone: 'UTC'}) || "",
         convencional: paciente?.convencional ??"",
         sintomas: paciente?.sintomas ??""
     })
@@ -77,7 +77,7 @@ export const Formulario = ({paciente}) => {
                     className='border-2 w-full p-2 mt-2 placeholder-gray-400 rounded-md mb-5'
                     placeholder='nombre de la mascota'
                     name='nombre'
-                    value={form.nombre}
+                    value={form.nombre || ""}
                     onChange={handleChange}
                 />
             </div>

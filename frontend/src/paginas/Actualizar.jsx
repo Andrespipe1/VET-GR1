@@ -11,23 +11,24 @@ const Actualizar = () => {
     const [paciente, setPaciente] = useState({})
     const [mensaje, setMensaje] = useState({})
 
-    useEffect(() => {
-        const consultarPaciente = async () => {
-            try {
-                const token = localStorage.getItem('token')
-                const url = `${import.meta.env.VITE_BACKEND_URL}/paciente/${id}`
-                const options = {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        Authorization: `Bearer ${token}`
-                    }
+    const consultarPaciente = async () => {
+        try {
+            const token = localStorage.getItem('token')
+            const url = `${import.meta.env.VITE_BACKEND_URL}/paciente/${id}`
+            const options = {
+                headers: {
+                    'Content-Type': 'application/json',
+                    Authorization: `Bearer ${token}`
                 }
-                const respuesta = await axios.get(url, options)
-                setPaciente(respuesta.data)
-            } catch (error) {
-                setMensaje({ respuesta: error.response.data.msg, tipo: false })
             }
+            const respuesta = await axios.get(url, options)
+            setPaciente(respuesta.data.paciente)
+        } catch (error) {
+            setMensaje({ respuesta: error.response.data.msg, tipo: false })
         }
+    }
+
+    useEffect(() => {
         consultarPaciente()
     }, [])
 

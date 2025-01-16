@@ -16,6 +16,8 @@ import { Confirmar } from './paginas/Confirmar'
 import { AuthProvider } from './context/AuthProvider'
 import { PrivateRoute } from './routes/PrivateRoute'
 import Restablecer from './paginas/Restablecer'
+import { TratamientosProvider } from './context/TratamientosProvider'
+
 
 
 
@@ -24,6 +26,7 @@ function App() {
     <>
       <BrowserRouter>
         <AuthProvider>
+        <TratamientosProvider>
           <Routes>
 
             <Route index element={<LandinPage />} />
@@ -53,6 +56,7 @@ function App() {
             } />
 
           </Routes>
+          </TratamientosProvider>
         </AuthProvider>
       </BrowserRouter>
     </>

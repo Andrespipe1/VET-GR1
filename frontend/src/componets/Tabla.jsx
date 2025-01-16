@@ -38,7 +38,7 @@ const Tabla = () => {
                 const data ={
                     salida:new Date().toString()
                 }
-                await axios.delete(url, {headers, data});
+                const respuesta =await axios.delete(url, {headers, data});
                 listarPacientes()
             }
         }
