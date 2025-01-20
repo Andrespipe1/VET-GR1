@@ -4,13 +4,16 @@ import axios from 'axios';
 import Mensaje from '../componets/Alertas/Mensaje';
 import ModalTratamiento from '../componets/Modals/ModalTratamiento';    
 import TratamientosContext from '../context/TratamientosProvider';
+import TablaTratamientos from '../componets/TablaTratamiento';
+import AuthContext from '../context/AuthProvider';
 
 
 const Visualizar = () => {
+    const { auth } = useContext(AuthContext)
     const [paciente, setPaciente] = useState({})
     const {id} = useParams()
     const [mensaje, setMensaje] = useState({})
-    const {modal, handleModal,tratamientos,setTratamientos} = useContext(TratamientosContext)
+    const {modal,handleModal, tratamientos, setTratamientos} = useContext(TratamientosContext)
 
 
     const formatearFecha = (fecha) => {
@@ -31,6 +34,7 @@ const Visualizar = () => {
             const respuesta = await axios.get(url, options)
             console.log(respuesta.data.paciente)
             setPaciente(respuesta.data.paciente)
+            setTratamientos(respuesta.data.tratamientos)
             
         } catch (error) {
             console.log(error);
@@ -89,7 +93,15 @@ const Visualizar = () => {
                                 </div>
                             </div>
                             <hr className='my-4' />
+                            {Object.keys(mensaje).length>0 && <Mensaje tipo={mensaje.tipo}>{mensaje.respuesta}</Mensaje>}
+
                             <p className='mb-8'>Este submódulo te permite visualizar los tratamientos del paciente</p>
+                            {
+                                auth.rol === "veterinario" &&
+                                (
+                                    <button className="px-5 py-2 bg-green-800 text-white rounded-lg hover:bg-green-700" onClick={handleModal}>Registrar</button>
+                                )
+                            }
                                 <button className="px-5 py-2 bg-green-800 text-white rounded-lg hover:bg-green-700" onClick={handleModal}>Registrar</button>
                                 {modal && (<ModalTratamiento idPaciente={paciente._id} />)}
                                 {
